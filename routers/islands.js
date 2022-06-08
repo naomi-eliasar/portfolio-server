@@ -101,7 +101,7 @@ router.post("/", auth, async (req, res, next) => {
       textColor,
       userId,
     });
-
+    console.log(newIsland);
     return res.status(200).send(newIsland);
   } catch (e) {
     console.log(e.message);

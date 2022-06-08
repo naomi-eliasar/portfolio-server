@@ -8,8 +8,10 @@ module.exports = {
         {
           name: "Cherry Coast",
           description: "Lucious coastal island, full of delicious cherries",
-          starterFruit: "Cherry",
-          starterFlower: "Lily",
+          starterFruit:
+            "https://www.models-resource.com/resources/big_icons/36/35111.png",
+          starterFlower:
+            "https://acnh.co/assets/img/nintendo-switch-acnh-flowers/white-lilies.png",
           backgroundColor: "#ff5723",
           textColor: "white",
           userId: 1,
@@ -19,8 +21,10 @@ module.exports = {
         {
           name: "Applelonie",
           description: "The best apples of the world are found here",
-          starterFruit: "Apple",
-          starterFlower: "Mum",
+          starterFruit:
+            "https://www.models-resource.com/resources/big_icons/36/35108.png",
+          starterFlower:
+            "https://acnh.co/assets/img/nintendo-switch-acnh-flowers/white-mums.png",
           backgroundColor: "#ff3d40",
           textColor: "#a5f758",
           userId: 2,

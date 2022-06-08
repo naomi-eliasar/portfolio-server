@@ -3,7 +3,7 @@ const router = new Router();
 const auth = require("../auth/middleware");
 const User = require("../models").user;
 const Favs = require("../models").favorite;
-const Residents = require("../models").islandVillager;
+const Island = require("../models").island;
 const API_KEY = process.env.REACT_APP_NOOKIPEDIA_API_KEY;
 
 //POST add new favorite
@@ -36,15 +36,11 @@ const API_KEY = process.env.REACT_APP_NOOKIPEDIA_API_KEY;
 //GET all residents from user
 router.get("/residents", auth, async (req, res) => {
   try {
-    const userId = req.user.id;
-    // const islandId = req.islands.id;
+    const userID = req.user.id;
     const residents = await Favs.findAll({
-      include: { model: User },
-      where: { resident: true, userId: userId },
+      include: [{ model: User }, { model: Island }],
+      where: [{ resident: true }, { userId: userID }],
     });
-    // const islandresident = await Residents.findAll({
-    //   where: { islandId: islandId },
-    // });
     res.send(residents);
   } catch (e) {
     console.log(e.message);
@@ -56,7 +52,7 @@ router.get("/dreamies", auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const dreamies = await Favs.findAll({
-      include: { model: User },
+      include: [{ model: User }, { model: Island }],
       where: { dreamie: true, userId: userId },
     });
     res.send(dreamies);
@@ -69,7 +65,7 @@ router.get("/dreamies", auth, async (req, res) => {
 router.get("/favs", async (req, res) => {
   try {
     const allFavs = await Favs.findAll({
-      include: { model: User },
+      include: [{ model: User }, { model: Island }],
     });
     res.send(allFavs);
   } catch (e) {
