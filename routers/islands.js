@@ -3,22 +3,27 @@ const router = new Router();
 const auth = require("../auth/middleware");
 const Island = require("../models").island;
 const User = require("../models").user;
+const Favs = require("../models").favorite;
 
-//GET all islands with user
+//GET all islands with user and residents
 router.get("/", async (req, res, next) => {
   try {
-    res.send(await Island.findAll({ include: { model: User } }));
+    res.send(
+      await Island.findAll({
+        include: [{ model: User }, { model: Favs }],
+      })
+    );
   } catch (e) {
     console.log(e);
     next(e);
   }
 });
 
-//GET specific island with user
+//GET specific island with user and residents
 router.get("/:id", async (req, res, next) => {
   try {
     const specificIsland = await Island.findByPk(req.params.id, {
-      include: { model: User },
+      include: [{ model: User }, { model: Favs }],
     });
     if (!specificIsland) {
       res.status(404).send(`Island with id ${req.params.id} not found`);
