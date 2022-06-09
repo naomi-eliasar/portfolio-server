@@ -6,6 +6,21 @@ const Favs = require("../models").favorite;
 const Island = require("../models").island;
 const API_KEY = process.env.REACT_APP_NOOKIPEDIA_API_KEY;
 
+//DELETE dreamie
+router.delete("/dreamies/:id", auth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const dreamieToDelete = await Favs.findByPk(id);
+    if (!dreamieToDelete)
+      return res.status(404).send(`no dreamie with ${id} found`);
+
+    await dreamieToDelete.destroy();
+    return res.status(200).send({ message: "dreamie deleted" });
+  } catch (e) {
+    console.log(e.message);
+  }
+});
+
 // POST add new dreamie
 router.post("/dreamies", auth, async (req, res) => {
   try {
@@ -58,6 +73,23 @@ router.get("/residents", auth, async (req, res) => {
     res.send(residents);
   } catch (e) {
     console.log(e.message);
+  }
+});
+
+//GET specific dreamie
+router.get("/dreamies/:id", async (req, res, next) => {
+  try {
+    const specificDreamie = await Favs.findByPk(req.params.id, {
+      where: { dreamie: true },
+    });
+    if (!specificDreamie) {
+      res.status(404).send(`Dreamie with id ${req.paramsid} not found`);
+    } else {
+      res.send(specificDreamie);
+    }
+  } catch (e) {
+    console.log(e.message);
+    next(e);
   }
 });
 
