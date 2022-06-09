@@ -7,25 +7,39 @@ const Island = require("../models").island;
 const API_KEY = process.env.REACT_APP_NOOKIPEDIA_API_KEY;
 
 // POST add new dreamie
-router.post("/favs", auth, async (req, res) => {
+router.post("/dreamies", auth, async (req, res) => {
   try {
-    const { villager, dreamie, resident } = req.body;
-    const userId = req.user.id;
+    const { villager, userId, islandId, dreamie, resident } = req.body;
+    const owner = await User.findByPk(userId);
+
+    console.log("post", userId);
+
+    if (!owner) {
+      res.status(404).send(`No user with id ${userId} found`);
+      return;
+    } else {
+      if (!villager || !userId) {
+        res.status(400).send("Not enough information provided");
+        return;
+      }
+    }
 
     const oldFav = await Favs.findOne({
-      where: { userId: userId, villager: villager },
+      where: { userId: userId, villager: villager, dreamie: true },
     });
     if (oldFav) {
-      res.status(400).send("Favorite already exist");
+      res.status(400).send(`Favorite ${villager} already exist`);
       return;
     }
 
     const newFav = await Favs.create({
-      userId: userId,
+      userId,
+      islandId,
       villager,
       dreamie,
       resident,
     });
+    console.log(newFav);
 
     res.send(newFav);
   } catch (e) {
