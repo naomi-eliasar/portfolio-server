@@ -7,15 +7,19 @@ const Island = require("../models").island;
 const API_KEY = process.env.REACT_APP_NOOKIPEDIA_API_KEY;
 
 //DELETE dreamie
-router.delete("/dreamies/:id", auth, async (req, res, next) => {
+router.delete("/dreamies/:name", auth, async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const dreamieToDelete = await Favs.findByPk(id);
+    const { name } = req.params;
+    console.log("name?", req.params.name);
+
+    const dreamieToDelete = await Favs.findOne({
+      where: { villager: name },
+    });
     if (!dreamieToDelete)
-      return res.status(404).send(`no dreamie with ${id} found`);
+      return res.status(404).send(`no dreamie called ${name} found`);
 
     await dreamieToDelete.destroy();
-    return res.status(200).send({ message: "dreamie deleted" });
+    return res.status(200).send({ message: `dreamie ${name} deleted` });
   } catch (e) {
     console.log(e.message);
   }
@@ -83,7 +87,7 @@ router.get("/dreamies/:id", async (req, res, next) => {
       where: { dreamie: true },
     });
     if (!specificDreamie) {
-      res.status(404).send(`Dreamie with id ${req.paramsid} not found`);
+      res.status(404).send(`Dreamie with id ${req.params.id} not found`);
     } else {
       res.send(specificDreamie);
     }
